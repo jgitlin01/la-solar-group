@@ -95,7 +95,7 @@
       height: 100%;
       object-fit: cover;
       object-position: center;
-      filter: brightness(0.55) saturate(1.1);
+      filter: brightness(0.65) saturate(1.1);
       z-index: 0;
     }
 
@@ -233,6 +233,139 @@
 
     @media (max-width: 680px) {
       .lp-offer-section { padding: 40px 20px; }
+    }
+
+    /* ── TCPA CONSENT ── */
+    .lp-tcpa {
+      font-size: 11px;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.45);
+      text-align: left;
+      margin-top: 14px;
+    }
+    .lp-tcpa a {
+      color: rgba(255,255,255,0.65);
+      text-decoration: underline;
+      transition: color 0.2s;
+    }
+    .lp-tcpa a:hover { color: var(--orange); }
+
+    /* ── FOOTER ── */
+    .lp-footer {
+      background: #060606;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      padding: 52px 52px 36px;
+    }
+
+    .lp-footer-inner { max-width: 1300px; margin: 0 auto; }
+
+    .lp-footer-top {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 48px;
+      padding-bottom: 36px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      margin-bottom: 28px;
+    }
+
+    .lp-footer-logo {
+      height: 34px;
+      width: auto;
+      display: block;
+      margin-bottom: 14px;
+      opacity: 0.85;
+    }
+
+    .lp-footer-tagline {
+      font-size: 13px;
+      color: rgba(255,255,255,0.38);
+      line-height: 1.6;
+      max-width: 260px;
+    }
+
+    .lp-footer-col-title {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 14px;
+    }
+
+    .lp-footer-contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      font-size: 14px;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
+    .lp-footer-contact-item svg {
+      width: 15px;
+      height: 15px;
+      stroke: var(--orange);
+      fill: none;
+      stroke-width: 2;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .lp-footer-contact-item a {
+      color: rgba(255,255,255,0.75);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    .lp-footer-contact-item a:hover { color: var(--orange); }
+
+    .lp-footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .lp-footer-links a {
+      font-size: 13px;
+      color: rgba(255,255,255,0.50);
+      text-decoration: none;
+      transition: color 0.2s;
+      line-height: 1.4;
+    }
+    .lp-footer-links a:hover { color: var(--orange); }
+
+    .lp-footer-bottom {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .lp-footer-copy {
+      font-size: 12px;
+      color: rgba(255,255,255,0.25);
+      line-height: 1.6;
+    }
+
+    .lp-footer-disclaimer {
+      font-size: 11px;
+      color: rgba(255,255,255,0.22);
+      line-height: 1.6;
+      max-width: 620px;
+      text-align: right;
+    }
+
+    @media (max-width: 900px) {
+      .lp-footer-top { grid-template-columns: 1fr 1fr; gap: 32px; }
+    }
+
+    @media (max-width: 580px) {
+      .lp-footer { padding: 40px 20px 28px; }
+      .lp-footer-top { grid-template-columns: 1fr; gap: 28px; }
+      .lp-footer-bottom { flex-direction: column; }
+      .lp-footer-disclaimer { text-align: left; }
     }
 
     /* ── ROTATING VALUE PROPS ── */
@@ -728,9 +861,8 @@
             <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
           </button>
 
-          <p class="lp-fine-print">
-            By submitting you agree to be contacted by LA Solar Group.<br>
-            We respect your privacy and will never sell your information.
+          <p class="lp-tcpa">
+            By clicking "Get My Free Quote," I agree to the <a href="privacy-policy.html" target="_blank">Terms of Service</a> and <a href="privacy-policy.html" target="_blank">Privacy Policy</a> and authorize LA Solar Group to contact me with offers about solar products or services by telephone calls, text messages, emails, artificial voice, and pre-recorded messages using an automated telephone technology, to the number and email I provided, even if my number is currently listed on any Do Not Call list. I understand that my consent is not a condition of purchase.
           </p>
         </form>
       </div>
@@ -768,6 +900,66 @@
       >
     </div>
   </div>
+
+  <!-- FOOTER -->
+  <footer class="lp-footer">
+    <div class="lp-footer-inner">
+
+      <div class="lp-footer-top">
+
+        <!-- Brand -->
+        <div>
+          <img class="lp-footer-logo" src="imgi_6_LA-Solar-Logo-Transparent-e1687470701879-1024x251.png" alt="LA Solar Group">
+          <p class="lp-footer-tagline">California's trusted solar installer — helping homeowners power their lives with clean, affordable energy since 2014.</p>
+        </div>
+
+        <!-- Contact -->
+        <div>
+          <div class="lp-footer-col-title">Contact Us</div>
+          <div class="lp-footer-contact-item">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.06 1.18 2 2 0 012.05 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+            <a href="tel:8183730077">(818) 373-0077</a>
+          </div>
+          <div class="lp-footer-contact-item">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span>Los Angeles, CA<br>Serving Southern California</span>
+          </div>
+          <div class="lp-footer-contact-item">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+            <a href="https://la-solargroup.com" target="_blank">la-solargroup.com</a>
+          </div>
+          <div class="lp-footer-contact-item" style="margin-top:4px;">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span>CSLB License #974115</span>
+          </div>
+        </div>
+
+        <!-- Legal -->
+        <div>
+          <div class="lp-footer-col-title">Legal</div>
+          <div class="lp-footer-links">
+            <a href="privacy-policy.html" target="_blank">Privacy Policy</a>
+            <a href="terms-of-service.html" target="_blank">Terms of Service</a>
+            <a href="do-not-sell.html" target="_blank">Do Not Sell or Share My Personal Information</a>
+            <a href="privacy-policy.html#ccpa" target="_blank">California Privacy Rights (CCPA)</a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Bottom bar -->
+      <div class="lp-footer-bottom">
+        <p class="lp-footer-copy">
+          © 2026 LA Solar Group. All Rights Reserved.<br>
+          LA Solar Group is a licensed solar installer serving Southern California. Results may vary.
+        </p>
+        <p class="lp-footer-disclaimer">
+          By submitting a form on this site you consent to be contacted by LA Solar Group via phone, text, and email. This site is protected and your information will never be sold. Offers subject to credit approval. See installer for details.
+        </p>
+      </div>
+
+    </div>
+  </footer>
 
   <script>
     /* Phone auto-format */
