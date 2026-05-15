@@ -546,16 +546,96 @@
       line-height: 1.5;
     }
 
-    /* GHL iframe wrapper — transparent so card glass shows through */
-    .lp-ghl-wrap {
-      margin: 0 -32px;
-      overflow: hidden;
+    /* ── FORM FIELDS ── */
+    .lp-field { display: flex; flex-direction: column; gap: 6px; }
+
+    .lp-field label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.85);
     }
 
-    .lp-ghl-wrap iframe {
-      display: block;
-      background: transparent;
+    .lp-field input,
+    .lp-field select {
+      width: 100%;
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 15px;
+      color: #fff;
+      outline: none;
+      appearance: none;
+      -webkit-appearance: none;
+      transition: border-color 0.18s, background 0.18s;
     }
+
+    .lp-field input::placeholder { color: rgba(255,255,255,0.25); }
+
+    .lp-field input:focus,
+    .lp-field select:focus {
+      border-color: rgba(232,114,26,0.7);
+      background: rgba(232,114,26,0.07);
+    }
+
+    .lp-field select option { background: #1a1a1a; color: #fff; }
+
+    .lp-form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 0;
+    }
+
+    .lp-form-grid .lp-field { margin-bottom: 0; }
+    .lp-form-grid .lp-field--full { grid-column: 1 / -1; }
+
+    .lp-form-rows {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 0;
+    }
+
+    /* Submit button */
+    .lp-submit {
+      width: 100%;
+      padding: 16px 20px;
+      background: var(--orange);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      cursor: pointer;
+      transition: background 0.18s, transform 0.15s, box-shadow 0.18s;
+      box-shadow: 0 4px 24px var(--orange-glow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .lp-submit svg {
+      width: 18px; height: 18px;
+      stroke: #fff; fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    .lp-submit:hover {
+      background: var(--orange-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 36px rgba(232,114,26,0.48);
+    }
+
+    .lp-submit:active { transform: translateY(0); }
+    .lp-submit:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
 
     .lp-fine-print {
       font-size: 11px;
@@ -737,25 +817,63 @@
           <p class="lp-form-sub">No obligation. No pressure. Takes 60 seconds.</p>
         </div>
 
-        <div class="lp-ghl-wrap">
-          <iframe
-            src="https://api.leadconnectorhq.com/widget/form/2GA2CcnVSGz6cS2ObjtR"
-            style="width:100%;height:780px;border:none;border-radius:4px;"
-            id="inline-2GA2CcnVSGz6cS2ObjtR"
-            data-layout="{'id':'INLINE'}"
-            data-trigger-type="alwaysShow"
-            data-trigger-value=""
-            data-activation-type="alwaysActivated"
-            data-activation-value=""
-            data-deactivation-type="neverDeactivate"
-            data-deactivation-value=""
-            data-form-name="Solar Savings [Qualify Form] English"
-            data-height="780"
-            data-layout-iframe-id="inline-2GA2CcnVSGz6cS2ObjtR"
-            data-form-id="2GA2CcnVSGz6cS2ObjtR"
-            title="Solar Savings [Qualify Form] English"
-          ></iframe>
-        </div>
+        <form id="solar-form" novalidate>
+          <div class="lp-form-rows">
+
+            <!-- Row 1: First Name | Last Name -->
+            <div class="lp-form-grid">
+              <div class="lp-field">
+                <label for="lp-first">First Name</label>
+                <input id="lp-first" name="firstName" type="text" placeholder="John" required>
+              </div>
+              <div class="lp-field">
+                <label for="lp-last">Last Name</label>
+                <input id="lp-last" name="lastName" type="text" placeholder="Smith" required>
+              </div>
+            </div>
+
+            <!-- Row 2: Phone | Email -->
+            <div class="lp-form-grid">
+              <div class="lp-field">
+                <label for="lp-phone">Phone</label>
+                <input id="lp-phone" name="phone" type="tel" placeholder="(818) 555-0000" required>
+              </div>
+              <div class="lp-field">
+                <label for="lp-email">Email</label>
+                <input id="lp-email" name="email" type="email" placeholder="john@email.com" required>
+              </div>
+            </div>
+
+            <!-- Row 3: Address (full width) -->
+            <div class="lp-form-grid">
+              <div class="lp-field lp-field--full">
+                <label for="lp-address">Residential Address</label>
+                <input id="lp-address" name="address" type="text" placeholder="123 Sunshine Ave, Los Angeles, CA" required>
+              </div>
+            </div>
+
+            <!-- Row 4: Monthly Bill (full width) -->
+            <div class="lp-form-grid">
+              <div class="lp-field lp-field--full">
+                <label for="lp-bill">Avg Monthly Electric Bill</label>
+                <select id="lp-bill" name="monthlyBill" required>
+                  <option value="" disabled selected>Select a range</option>
+                  <option value="under-100">Under $100</option>
+                  <option value="100-200">$100 – $200</option>
+                  <option value="200-300">$200 – $300</option>
+                  <option value="300-400">$300 – $400</option>
+                  <option value="400+">$400+</option>
+                </select>
+              </div>
+            </div>
+
+            <button type="submit" class="lp-submit">
+              Get My Free Quote
+              <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </button>
+
+          </div>
+        </form>
 
         <p class="lp-tcpa">
           By clicking "Get My Free Quote," I agree to the <a href="https://la-solargroup.com/terms-and-conditions/" target="_blank">Terms and Conditions</a> and <a href="https://la-solargroup.com/privacy-policy/" target="_blank">Privacy Policy</a> and authorize LA Solar Group to contact me with offers about solar products or services by telephone calls, text messages, emails, artificial voice, and pre-recorded messages using an automated telephone technology, to the number and email I provided, even if my number is currently listed on any Do Not Call list. I understand that my consent is not a condition of purchase.
@@ -855,9 +973,6 @@
     </div>
   </footer>
 
-  <!-- Go High Level form embed -->
-  <script src="https://link.msgsndr.com/js/form_embed.js"></script>
-
   <!-- ADA Accessibility Widget -->
   <script>!function(){function e(){var e=document.createElement("script");e.type="text/javascript",e.async=!0,e.setAttribute("embed-id","94a46ba3-70ab-4835-8166-c38b28a566a3"),e.src="https://embed.adabundle.com/embed-scripts/94a46ba3-70ab-4835-8166-c38b28a566a3",window.top.document.getElementsByTagName("body")[0].appendChild(e)}"complete"===document.readyState||"interactive"===document.readyState?e():document.addEventListener("DOMContentLoaded",e)}();</script>
 
@@ -866,8 +981,7 @@
     const hdr = document.querySelector('.lp-header');
     window.addEventListener('scroll', () => {
       hdr.style.background = window.scrollY > 60
-        ? 'rgba(0,0,0,0.90)'
-        : 'rgba(0,0,0,0.65)';
+        ? 'rgba(0,0,0,0.90)' : 'rgba(0,0,0,0.65)';
     }, { passive: true });
 
     /* Rotating value props */
@@ -881,10 +995,59 @@
       }, 4000);
     })();
 
+    /* Phone auto-format */
+    const ph = document.getElementById('lp-phone');
+    if (ph) {
+      ph.addEventListener('input', e => {
+        const raw = e.target.value.replace(/\D/g,'').slice(0,10);
+        if (raw.length <= 3)      e.target.value = raw;
+        else if (raw.length <= 6) e.target.value = `(${raw.slice(0,3)}) ${raw.slice(3)}`;
+        else                      e.target.value = `(${raw.slice(0,3)}) ${raw.slice(3,6)}-${raw.slice(6)}`;
+      });
+    }
+
+    /* Form submission → GHL */
+    const form = document.getElementById('solar-form');
+    if (form) {
+      form.addEventListener('submit', async e => {
+        e.preventDefault();
+        const btn = form.querySelector('.lp-submit');
+        btn.disabled = true;
+        btn.innerHTML = '<svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2.5;animation:spin 0.8s linear infinite"><circle cx="12" cy="12" r="10" stroke-dasharray="40" stroke-dashoffset="15"/></svg> Sending…';
+
+        const data = {
+          firstName:   form.firstName.value.trim(),
+          lastName:    form.lastName.value.trim(),
+          phone:       form.phone.value.trim(),
+          email:       form.email.value.trim(),
+          address:     form.address.value.trim(),
+          monthlyBill: form.monthlyBill.value,
+          formId:      '2GA2CcnVSGz6cS2ObjtR',
+        };
+
+        try {
+          await fetch('https://backend.leadconnectorhq.com/forms/submit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+          });
+        } catch (_) { /* fail silently — lead still captured if webhook is set */ }
+
+        btn.innerHTML = '✓ Request Received!';
+        btn.style.background = '#2ea843';
+        btn.style.boxShadow = '0 4px 24px rgba(46,168,67,0.4)';
+        form.querySelectorAll('input,select').forEach(el => el.disabled = true);
+      });
+    }
+
     /* Ensure video plays on mobile */
     const vid = document.querySelector('.lp-hero-video');
     if (vid) { vid.play().catch(() => {}); }
   </script>
+
+  <style>
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
 
 </body>
 </html>
