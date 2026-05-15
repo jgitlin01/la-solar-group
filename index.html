@@ -546,94 +546,16 @@
       line-height: 1.5;
     }
 
-    /* Fields */
-    .lp-field { margin-bottom: 12px; }
+    /* GHL iframe wrapper — transparent so card glass shows through */
+    .lp-ghl-wrap {
+      margin: 0 -32px;
+      overflow: hidden;
+    }
 
-    .lp-field label {
+    .lp-ghl-wrap iframe {
       display: block;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.85);
-      margin-bottom: 6px;
+      background: transparent;
     }
-
-    .lp-field input,
-    .lp-field select {
-      width: 100%;
-      padding: 12px 14px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.10);
-      border-radius: 8px;
-      font-family: 'Outfit', sans-serif;
-      font-size: 15px;
-      font-weight: 400;
-      color: #fff;
-      outline: none;
-      appearance: none;
-      -webkit-appearance: none;
-      transition: border-color 0.18s, background 0.18s;
-    }
-
-    .lp-field input::placeholder { color: rgba(255,255,255,0.22); }
-
-    .lp-field input:focus,
-    .lp-field select:focus {
-      border-color: rgba(232,114,26,0.7);
-      background: rgba(232,114,26,0.07);
-    }
-
-    .lp-field select option {
-      background: #1a1a1a;
-      color: #fff;
-    }
-
-    .lp-field-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
-    /* Submit button */
-    .lp-submit {
-      width: 100%;
-      padding: 16px 20px;
-      background: var(--orange);
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      font-family: 'Outfit', sans-serif;
-      font-size: 17px;
-      font-weight: 800;
-      letter-spacing: -0.01em;
-      cursor: pointer;
-      margin-top: 8px;
-      transition: background 0.18s, transform 0.15s, box-shadow 0.18s;
-      box-shadow: 0 4px 24px var(--orange-glow);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-
-    .lp-submit svg {
-      width: 18px;
-      height: 18px;
-      stroke: #fff;
-      fill: none;
-      stroke-width: 2.5;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .lp-submit:hover {
-      background: var(--orange-hover);
-      transform: translateY(-2px);
-      box-shadow: 0 10px 36px rgba(232,114,26,0.48);
-    }
-
-    .lp-submit:active { transform: translateY(0); }
 
     .lp-fine-print {
       font-size: 11px;
@@ -699,7 +621,7 @@
       .lp-hero-inner { padding: 100px 20px 60px; }
       .lp-headline { letter-spacing: -0.02em; }
       .lp-form-card { padding: 28px 20px 24px; border-radius: 12px; }
-      .lp-field-row { grid-template-columns: 1fr; }
+      .lp-ghl-wrap { margin: 0 -20px; }
       .lp-trust { padding: 20px 16px; }
       .lp-trust-item {
         width: 50%;
@@ -809,62 +731,36 @@
 
       </div>
 
-      <!-- RIGHT: Quote form -->
+      <!-- RIGHT: Quote form (Go High Level) -->
       <div class="lp-form-card" id="quote-form">
         <div class="lp-form-head">
           <div class="lp-form-title">Get Your <span>Free</span> Solar Quote</div>
           <p class="lp-form-sub">No obligation. No pressure. Takes 60 seconds.</p>
         </div>
 
-        <form action="#" method="post" id="solar-form">
+        <div class="lp-ghl-wrap">
+          <iframe
+            src="https://api.leadconnectorhq.com/widget/form/vnJUj5BVDSIuqavjRp48"
+            style="width:100%;height:1029px;border:none;border-radius:4px;"
+            id="inline-vnJUj5BVDSIuqavjRp48"
+            data-layout="{'id':'INLINE'}"
+            data-trigger-type="alwaysShow"
+            data-trigger-value=""
+            data-activation-type="alwaysActivated"
+            data-activation-value=""
+            data-deactivation-type="neverDeactivate"
+            data-deactivation-value=""
+            data-form-name="Contact Us"
+            data-height="1029"
+            data-layout-iframe-id="inline-vnJUj5BVDSIuqavjRp48"
+            data-form-id="vnJUj5BVDSIuqavjRp48"
+            title="Contact Us"
+          ></iframe>
+        </div>
 
-          <div class="lp-field-row">
-            <div class="lp-field">
-              <label for="lp-first">First Name</label>
-              <input id="lp-first" type="text" name="first_name" placeholder="John" required>
-            </div>
-            <div class="lp-field">
-              <label for="lp-last">Last Name</label>
-              <input id="lp-last" type="text" name="last_name" placeholder="Smith" required>
-            </div>
-          </div>
-
-          <div class="lp-field">
-            <label for="lp-phone">Phone Number</label>
-            <input id="lp-phone" type="tel" name="phone" placeholder="(818) 555-0000" required>
-          </div>
-
-          <div class="lp-field">
-            <label for="lp-email">Email Address</label>
-            <input id="lp-email" type="email" name="email" placeholder="john@email.com" required>
-          </div>
-
-          <div class="lp-field">
-            <label for="lp-address">Home Address</label>
-            <input id="lp-address" type="text" name="address" placeholder="123 Sunshine Ave, Los Angeles, CA" required>
-          </div>
-
-          <div class="lp-field">
-            <label for="lp-bill">Average Monthly Electric Bill</label>
-            <select id="lp-bill" name="monthly_bill">
-              <option value="" disabled selected>Select a range</option>
-              <option value="under-100">Under $100</option>
-              <option value="100-200">$100 – $200</option>
-              <option value="200-300">$200 – $300</option>
-              <option value="300-400">$300 – $400</option>
-              <option value="400+">$400+</option>
-            </select>
-          </div>
-
-          <button type="submit" class="lp-submit">
-            Get My Free Quote
-            <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-          </button>
-
-          <p class="lp-tcpa">
-            By clicking "Get My Free Quote," I agree to the <a href="https://la-solargroup.com/terms-and-conditions/" target="_blank">Terms and Conditions</a> and <a href="https://la-solargroup.com/privacy-policy/" target="_blank">Privacy Policy</a> and authorize LA Solar Group to contact me with offers about solar products or services by telephone calls, text messages, emails, artificial voice, and pre-recorded messages using an automated telephone technology, to the number and email I provided, even if my number is currently listed on any Do Not Call list. I understand that my consent is not a condition of purchase.
-          </p>
-        </form>
+        <p class="lp-tcpa">
+          By clicking "Get My Free Quote," I agree to the <a href="https://la-solargroup.com/terms-and-conditions/" target="_blank">Terms and Conditions</a> and <a href="https://la-solargroup.com/privacy-policy/" target="_blank">Privacy Policy</a> and authorize LA Solar Group to contact me with offers about solar products or services by telephone calls, text messages, emails, artificial voice, and pre-recorded messages using an automated telephone technology, to the number and email I provided, even if my number is currently listed on any Do Not Call list. I understand that my consent is not a condition of purchase.
+        </p>
       </div>
 
     </div>
@@ -960,21 +856,13 @@
     </div>
   </footer>
 
+  <!-- Go High Level form embed -->
+  <script src="https://link.msgsndr.com/js/form_embed.js"></script>
+
   <!-- ADA Accessibility Widget -->
   <script>!function(){function e(){var e=document.createElement("script");e.type="text/javascript",e.async=!0,e.setAttribute("embed-id","94a46ba3-70ab-4835-8166-c38b28a566a3"),e.src="https://embed.adabundle.com/embed-scripts/94a46ba3-70ab-4835-8166-c38b28a566a3",window.top.document.getElementsByTagName("body")[0].appendChild(e)}"complete"===document.readyState||"interactive"===document.readyState?e():document.addEventListener("DOMContentLoaded",e)}();</script>
 
   <script>
-    /* Phone auto-format */
-    const ph = document.getElementById('lp-phone');
-    if (ph) {
-      ph.addEventListener('input', e => {
-        const raw = e.target.value.replace(/\D/g,'').slice(0,10);
-        if (raw.length <= 3)      e.target.value = raw;
-        else if (raw.length <= 6) e.target.value = `(${raw.slice(0,3)}) ${raw.slice(3)}`;
-        else                      e.target.value = `(${raw.slice(0,3)}) ${raw.slice(3,6)}-${raw.slice(6)}`;
-      });
-    }
-
     /* Nav background on scroll */
     const hdr = document.querySelector('.lp-header');
     window.addEventListener('scroll', () => {
@@ -982,20 +870,6 @@
         ? 'rgba(0,0,0,0.90)'
         : 'rgba(0,0,0,0.65)';
     }, { passive: true });
-
-    /* Form submission feedback */
-    const form = document.getElementById('solar-form');
-    if (form) {
-      form.addEventListener('submit', e => {
-        e.preventDefault();
-        const btn = form.querySelector('.lp-submit');
-        btn.innerHTML = '✓ Request Received!';
-        btn.style.background = '#2ea843';
-        btn.style.boxShadow = '0 4px 24px rgba(46,168,67,0.4)';
-        btn.disabled = true;
-        form.querySelectorAll('input, select').forEach(el => el.disabled = true);
-      });
-    }
 
     /* Rotating value props */
     (function() {
@@ -1010,9 +884,7 @@
 
     /* Ensure video plays on mobile */
     const vid = document.querySelector('.lp-hero-video');
-    if (vid) {
-      vid.play().catch(() => {});
-    }
+    if (vid) { vid.play().catch(() => {}); }
   </script>
 
 </body>
