@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LA Solar Group – Get a Free Solar Quote</title>
+  <title>LA Solar Group – Get a $300 Bonus Hotel Savings Card</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -135,30 +135,87 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* Star rating */
-    .lp-stars {
+    /* Badges row */
+    .lp-badges {
       display: flex;
       align-items: center;
       gap: 10px;
+      flex-wrap: wrap;
       margin-bottom: 28px;
     }
 
-    .lp-star-icons {
-      display: flex;
-      gap: 3px;
-    }
-
-    .lp-star-icons svg {
-      width: 20px;
-      height: 20px;
-      fill: #F5B935;
-    }
-
-    .lp-star-label {
-      font-size: 14px;
-      font-weight: 500;
-      color: rgba(255,255,255,0.65);
+    .lp-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 16px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 600;
       letter-spacing: 0.01em;
+    }
+
+    .lp-badge--orange {
+      background: var(--orange);
+      color: #fff;
+    }
+
+    .lp-badge--dark {
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.85);
+    }
+
+    /* Offer section */
+    .lp-offer-section {
+      background: #fff;
+      padding: 60px 52px;
+    }
+
+    .lp-offer-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+      text-align: center;
+    }
+
+    .lp-offer-headline {
+      font-size: clamp(22px, 3vw, 32px);
+      font-weight: 500;
+      color: #1a1a1a;
+      line-height: 1.4;
+    }
+
+    .lp-offer-headline strong {
+      font-weight: 800;
+      color: #1a1a1a;
+    }
+
+    .lp-offer-tax {
+      font-size: clamp(20px, 2.5vw, 28px);
+      font-weight: 500;
+      color: #1a1a1a;
+      line-height: 1.4;
+    }
+
+    .lp-offer-tax .ot-orange {
+      color: var(--orange);
+      font-weight: 800;
+    }
+
+    .lp-offer-graphic {
+      width: 100%;
+      max-width: 720px;
+      border-radius: 16px;
+      display: block;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    }
+
+    @media (max-width: 680px) {
+      .lp-offer-section { padding: 40px 20px; }
     }
 
     /* Headline */
@@ -515,50 +572,41 @@
       <!-- LEFT: Headline + copy -->
       <div class="lp-left">
 
-        <!-- Star rating -->
-        <div class="lp-stars">
-          <div class="lp-star-icons">
-            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          </div>
-          <span class="lp-star-label">500+ Five-Star Reviews</span>
+        <!-- Badges -->
+        <div class="lp-badges">
+          <span class="lp-badge lp-badge--orange">Limited Time Offer</span>
+          <span class="lp-badge lp-badge--dark">Smart Solar Savings &amp; Sunny Rewards</span>
         </div>
 
         <!-- BIG headline -->
         <h1 class="lp-headline">
-          Go Solar<br>
-          <span class="hl-orange">$0 Down.</span><br>
-          Start Saving<br>
-          Now.
+          Get a <span class="hl-orange">$300 Bonus</span> Hotel Savings Card When You Get a Solar Quote
         </h1>
 
         <p class="lp-subhead">
-          Lock in the <strong style="color:#fff;font-weight:600">30% Federal Tax Credit</strong> before it changes. As energy costs keep rising, LA Solar Group customers are saving tens of thousands — powering their homes and EVs with clean, affordable solar.
+          Get your free quote now and receive a <strong style="color:#fff;font-weight:700">$300 hotel savings card.</strong> Plus lock in the 30% Federal Tax Credit before it expires.
         </p>
 
-        <div class="lp-section-label">Our Prepaid PPA Lets You:</div>
+        <div class="lp-section-label">Why Go Solar With Us:</div>
 
         <div class="lp-checks">
           <div class="lp-check">
             <div class="lp-check-icon">
               <svg viewBox="0 0 14 14"><polyline points="2 7 5.5 10.5 12 3.5"/></svg>
             </div>
-            Take advantage of the 30% Federal Tax Credit
+            Go solar for just <strong style="color:#fff">$99/month</strong> — battery included in price
+          </div>
+          <div class="lp-check">
+            <div class="lp-check-icon">
+              <svg viewBox="0 0 14 14"><polyline points="2 7 5.5 10.5 12 3.5"/></svg>
+            </div>
+            <strong style="color:var(--orange)">30% Tax Credit</strong> guaranteed — sign up for solar or a battery
           </div>
           <div class="lp-check">
             <div class="lp-check-icon">
               <svg viewBox="0 0 14 14"><polyline points="2 7 5.5 10.5 12 3.5"/></svg>
             </div>
             Add Tesla Powerwall battery storage &amp; smart breakers
-          </div>
-          <div class="lp-check">
-            <div class="lp-check-icon">
-              <svg viewBox="0 0 14 14"><polyline points="2 7 5.5 10.5 12 3.5"/></svg>
-            </div>
-            Increase long-term savings &amp; control your energy use
           </div>
           <div class="lp-check">
             <div class="lp-check-icon">
@@ -589,7 +637,7 @@
       <!-- RIGHT: Quote form -->
       <div class="lp-form-card" id="quote-form">
         <div class="lp-form-head">
-          <div class="lp-form-title">Get Your <span>Free</span> Solar Quote</div>
+          <div class="lp-form-title">Claim Your <span>$300 Bonus</span> &amp; Free Quote</div>
           <p class="lp-form-sub">No obligation. No pressure. Takes 60 seconds.</p>
         </div>
 
@@ -634,7 +682,7 @@
           </div>
 
           <button type="submit" class="lp-submit">
-            Get My Free Quote
+            Get a Quote &amp; Claim $300 Bonus
             <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
           </button>
 
@@ -669,6 +717,24 @@
     <div class="lp-trust-item">
       <div class="lp-trust-num">500+</div>
       <div class="lp-trust-label">Homes<br>Powered</div>
+    </div>
+  </div>
+
+  <!-- OFFER SECTION -->
+  <div class="lp-offer-section">
+    <div class="lp-offer-inner">
+      <p class="lp-offer-headline">
+        Get your free quote now and receive a<br>
+        <strong>$300 hotel savings card.</strong>
+      </p>
+      <p class="lp-offer-tax">
+        <span class="ot-orange">30%</span> Tax Credit Guaranteed — Sign up for solar or a battery to get <span class="ot-orange">30% tax credit</span>
+      </p>
+      <img
+        class="lp-offer-graphic"
+        src="offer-graphic.png"
+        alt="Go Solar for just $99/month — Battery included in price"
+      >
     </div>
   </div>
 
