@@ -7,7 +7,7 @@
 
   <!-- Open Graph / Social Share -->
   <meta property="og:title" content="Go Solar for Just $99/Month — Battery Included" />
-  <meta property="og:description" content="Go solar for just $99/month with battery included. Lock in the 30% Federal Tax Credit. Free quote — no obligation." />
+  <meta property="og:description" content="Go solar for just $99/month with battery included. $0 down, predictable monthly payments. Free quote — no obligation." />
   <meta property="og:image" content="hero-bg.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
@@ -233,6 +233,34 @@
 
     @media (max-width: 680px) {
       .lp-offer-section { padding: 40px 20px; }
+    }
+
+    /* ── ROTATING VALUE PROPS ── */
+    .lp-rotate-wrap {
+      position: relative;
+      min-height: 80px;
+      margin-bottom: 32px;
+    }
+
+    .lp-rotate-msg {
+      font-size: clamp(16px, 1.8vw, 20px);
+      font-weight: 500;
+      line-height: 1.55;
+      color: rgba(255,255,255,0.78);
+      max-width: 520px;
+      position: absolute;
+      top: 0; left: 0;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      pointer-events: none;
+    }
+
+    .lp-rotate-msg.active {
+      opacity: 1;
+      transform: translateY(0);
+      position: relative;
+      pointer-events: auto;
     }
 
     /* Headline */
@@ -600,9 +628,12 @@
           Go Solar<br><span class="hl-orange">$0 Down.</span><br>Start Saving Now.
         </h1>
 
-        <p class="lp-subhead">
-          Lock in the <strong style="color:#fff;font-weight:700">30% Federal Tax Credit</strong> before it expires. As energy costs keep rising, LA Solar Group customers are saving tens of thousands — powering their homes and EVs with clean, affordable solar.
-        </p>
+        <!-- Rotating value props -->
+        <div class="lp-rotate-wrap">
+          <p class="lp-rotate-msg active">Homeowners Who Went Solar Are Saving an Average of $1,500/Year on Electricity. Is Your Home Next?</p>
+          <p class="lp-rotate-msg">Blackouts, Rate Spikes, Grid Uncertainty — Go Solar and Take Control of Your Energy Future.</p>
+          <p class="lp-rotate-msg">Stop Renting Your Power. Start Owning It — $0 Down, Predictable Monthly Payments.</p>
+        </div>
 
         <div class="lp-section-label">Why Go Solar With Us:</div>
 
@@ -612,12 +643,6 @@
               <svg viewBox="0 0 14 14"><polyline points="2 7 5.5 10.5 12 3.5"/></svg>
             </div>
             Go solar for just <strong style="color:#fff">$99/month</strong> — battery included in price
-          </div>
-          <div class="lp-check">
-            <div class="lp-check-icon">
-              <svg viewBox="0 0 14 14"><polyline points="2 7 5.5 10.5 12 3.5"/></svg>
-            </div>
-            <strong style="color:var(--orange)">30% Tax Credit</strong> guaranteed — sign up for solar or a battery
           </div>
           <div class="lp-check">
             <div class="lp-check-icon">
@@ -637,7 +662,7 @@
         <div class="lp-hero-trust">
           <div class="lp-hero-trust-item">
             <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            Lifetime Warranty
+            25 Year Warranty
           </div>
           <div class="lp-hero-trust-item">
             <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
@@ -720,10 +745,6 @@
       <div class="lp-trust-label">Down<br>Financing</div>
     </div>
     <div class="lp-trust-item">
-      <div class="lp-trust-num">30%</div>
-      <div class="lp-trust-label">Tax Credit<br>Guaranteed</div>
-    </div>
-    <div class="lp-trust-item">
       <div class="lp-trust-num">25yr</div>
       <div class="lp-trust-label">Panel<br>Warranty</div>
     </div>
@@ -740,9 +761,6 @@
   <!-- OFFER SECTION -->
   <div class="lp-offer-section">
     <div class="lp-offer-inner">
-      <p class="lp-offer-tax">
-        <span class="ot-orange">30%</span> Tax Credit Guaranteed — Sign up for solar or a battery to get <span class="ot-orange">30% tax credit</span>
-      </p>
       <img
         class="lp-offer-graphic"
         src="offer-graphic.png"
@@ -784,6 +802,17 @@
         form.querySelectorAll('input, select').forEach(el => el.disabled = true);
       });
     }
+
+    /* Rotating value props */
+    (function() {
+      const msgs = document.querySelectorAll('.lp-rotate-msg');
+      let cur = 0;
+      setInterval(() => {
+        msgs[cur].classList.remove('active');
+        cur = (cur + 1) % msgs.length;
+        msgs[cur].classList.add('active');
+      }, 4000);
+    })();
 
     /* Ensure video plays on mobile */
     const vid = document.querySelector('.lp-hero-video');
