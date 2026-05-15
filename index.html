@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LA Solar Group – Get a Free Solar Quote</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange: #E8721A;
+      --orange-hover: #D0620F;
+      --orange-glow: rgba(232,114,26,0.35);
+      --dark: #0a0a0a;
+      --surface: rgba(255,255,255,0.05);
+      --border: rgba(255,255,255,0.09);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Outfit', system-ui, sans-serif;
+      background: var(--dark);
+      color: #fff;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ── HEADER ─────────────────────────────── */
+    .lp-header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      padding: 18px 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(0,0,0,0.65);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      transition: background 0.3s;
+    }
+
+    .lp-logo { height: 40px; display: block; }
+
+    .lp-header-phone {
+      color: rgba(255,255,255,0.92);
+      font-size: 20px;
+      font-weight: 700;
+      text-decoration: none;
+      letter-spacing: 0.01em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.2s;
+    }
+    .lp-header-phone svg { opacity: 0.7; }
+    .lp-header-phone:hover { color: var(--orange); }
+
+    /* ── HERO ───────────────────────────────── */
+    .lp-hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Video background */
+    .lp-hero-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      filter: brightness(0.55) saturate(1.1);
+      z-index: 0;
+    }
+
+    /* Gradient overlays */
+    .lp-hero-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background:
+        linear-gradient(
+          105deg,
+          rgba(0,0,0,0.80) 0%,
+          rgba(0,0,0,0.55) 48%,
+          rgba(0,0,0,0.20) 100%
+        ),
+        radial-gradient(
+          ellipse 70% 50% at 50% 110%,
+          rgba(232,114,26,0.18) 0%,
+          transparent 70%
+        );
+    }
+
+    /* Bottom fade to black for seamless page flow */
+    .lp-hero-fade {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 220px;
+      background: linear-gradient(to bottom, transparent, var(--dark));
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* ── HERO INNER ─────────────────────────── */
+    .lp-hero-inner {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 140px 52px 100px;
+      display: grid;
+      grid-template-columns: 1fr 430px;
+      gap: 72px;
+      align-items: flex-start;
+    }
+
+    /* ── LEFT: TEXT ─────────────────────────── */
+    .lp-left {
+      animation: fadeUp 0.9s cubic-bezier(0.16,1,0.3,1) both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(32px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Star rating */
+    .lp-stars {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .lp-star-icons {
+      display: flex;
+      gap: 3px;
+    }
+
+    .lp-star-icons svg {
+      width: 20px;
+      height: 20px;
+      fill: #F5B935;
+    }
+
+    .lp-star-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.65);
+      letter-spacing: 0.01em;
+    }
+
+    /* Headline */
+    .lp-headline {
+      font-size: clamp(52px, 7.5vw, 96px);
+      font-weight: 800;
+      line-height: 1.02;
+      letter-spacing: -0.025em;
+      color: #fff;
+      margin-bottom: 24px;
+      text-shadow: 0 2px 40px rgba(0,0,0,0.4);
+    }
+
+    .lp-headline .hl-orange { color: var(--orange); }
+
+    /* Subheadline */
+    .lp-subhead {
+      font-size: clamp(17px, 2vw, 22px);
+      font-weight: 400;
+      line-height: 1.55;
+      color: rgba(255,255,255,0.72);
+      max-width: 500px;
+      margin-bottom: 36px;
+    }
+
+    /* Checks */
+    .lp-section-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 16px;
+    }
+
+    .lp-checks {
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+      margin-bottom: 40px;
+    }
+
+    .lp-check {
+      display: flex;
+      align-items: flex-start;
+      gap: 13px;
+      font-size: 18px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.88);
+      line-height: 1.45;
+    }
+
+    .lp-check-icon {
+      width: 24px;
+      height: 24px;
+      min-width: 24px;
+      background: var(--orange);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    .lp-check-icon svg {
+      width: 13px;
+      height: 13px;
+      fill: none;
+      stroke: #fff;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* CTA below form (mobile) */
+    .lp-hero-cta {
+      display: none;
+    }
+
+    /* Trust signals row */
+    .lp-hero-trust {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      flex-wrap: wrap;
+    }
+
+    .lp-hero-trust-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.55);
+    }
+
+    .lp-hero-trust-item svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--orange);
+      fill: none;
+      stroke-width: 2;
+      flex-shrink: 0;
+    }
+
+    /* ── FORM CARD ──────────────────────────── */
+    .lp-form-card {
+      background: rgba(10,10,10,0.82);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 16px;
+      padding: 36px 32px 32px;
+      box-shadow:
+        0 40px 80px rgba(0,0,0,0.6),
+        0 0 0 1px rgba(255,255,255,0.04) inset,
+        0 0 60px rgba(232,114,26,0.08);
+      animation: fadeUp 0.9s 0.18s cubic-bezier(0.16,1,0.3,1) both;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Subtle orange top glow line */
+    .lp-form-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 12px; right: 12px;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(232,114,26,0.7), transparent);
+    }
+
+    .lp-form-head { margin-bottom: 22px; }
+
+    .lp-form-title {
+      font-size: 26px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+
+    .lp-form-title span { color: var(--orange); }
+
+    .lp-form-sub {
+      font-size: 13px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.42);
+      line-height: 1.5;
+    }
+
+    /* Fields */
+    .lp-field { margin-bottom: 12px; }
+
+    .lp-field label {
+      display: block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.38);
+      margin-bottom: 6px;
+    }
+
+    .lp-field input,
+    .lp-field select {
+      width: 100%;
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 8px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 15px;
+      font-weight: 400;
+      color: #fff;
+      outline: none;
+      appearance: none;
+      -webkit-appearance: none;
+      transition: border-color 0.18s, background 0.18s;
+    }
+
+    .lp-field input::placeholder { color: rgba(255,255,255,0.22); }
+
+    .lp-field input:focus,
+    .lp-field select:focus {
+      border-color: rgba(232,114,26,0.7);
+      background: rgba(232,114,26,0.07);
+    }
+
+    .lp-field select option {
+      background: #1a1a1a;
+      color: #fff;
+    }
+
+    .lp-field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    /* Submit button */
+    .lp-submit {
+      width: 100%;
+      padding: 16px 20px;
+      background: var(--orange);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.18s, transform 0.15s, box-shadow 0.18s;
+      box-shadow: 0 4px 24px var(--orange-glow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .lp-submit svg {
+      width: 18px;
+      height: 18px;
+      stroke: #fff;
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .lp-submit:hover {
+      background: var(--orange-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 36px rgba(232,114,26,0.48);
+    }
+
+    .lp-submit:active { transform: translateY(0); }
+
+    .lp-fine-print {
+      font-size: 11px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.25);
+      text-align: center;
+      margin-top: 12px;
+      line-height: 1.55;
+    }
+
+    /* ── TRUST BAR ──────────────────────────── */
+    .lp-trust {
+      position: relative;
+      z-index: 10;
+      background: #0c0c0c;
+      border-top: 1px solid var(--border);
+      padding: 28px 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0;
+    }
+
+    .lp-trust-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 40px;
+      border-right: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .lp-trust-item:last-child { border-right: none; }
+
+    .lp-trust-num {
+      font-size: 38px;
+      font-weight: 800;
+      color: var(--orange);
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    .lp-trust-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.45);
+      line-height: 1.5;
+    }
+
+    /* ── RESPONSIVE ─────────────────────────── */
+    @media (max-width: 1100px) {
+      .lp-hero-inner {
+        grid-template-columns: 1fr;
+        padding: 120px 40px 80px;
+        gap: 48px;
+      }
+      .lp-form-card { max-width: 540px; }
+    }
+
+    @media (max-width: 680px) {
+      .lp-header { padding: 14px 20px; }
+      .lp-header-phone { font-size: 17px; }
+      .lp-hero-inner { padding: 100px 20px 60px; }
+      .lp-headline { letter-spacing: -0.02em; }
+      .lp-form-card { padding: 28px 20px 24px; border-radius: 12px; }
+      .lp-field-row { grid-template-columns: 1fr; }
+      .lp-trust { padding: 20px 16px; }
+      .lp-trust-item {
+        width: 50%;
+        border-right: none;
+        border-bottom: 1px solid rgba(255,255,255,0.07);
+        padding: 14px 16px;
+      }
+      .lp-trust-item:nth-last-child(-n+2) { border-bottom: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="lp-header">
+    <img
+      class="lp-logo"
+      src="imgi_6_LA-Solar-Logo-Transparent-e1687470701879-1024x251.png"
+      alt="LA Solar Group"
+    >
+    <a href="tel:8183730077" class="lp-header-phone">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.06 1.18 2 2 0 012.05 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+      (818) 373-0077
+    </a>
+  </header>
+
+  <!-- HERO -->
+  <section class="lp-hero">
+
+    <!-- Background video -->
+    <video
+      class="lp-hero-video"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="auto"
+    >
+      <source src="LASG Home Animation.mp4" type="video/mp4">
+    </video>
+
+    <!-- Gradient overlays -->
+    <div class="lp-hero-overlay"></div>
+    <div class="lp-hero-fade"></div>
+
+    <div class="lp-hero-inner">
+
+      <!-- LEFT: Headline + copy -->
+      <div class="lp-left">
+
+        <!-- Star rating -->
+        <div class="lp-stars">
+          <div class="lp-star-icons">
+            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          <span class="lp-star-label">500+ Five-Star Reviews</span>
+        </div>
+
+        <!-- BIG headline -->
+        <h1 class="lp-headline">
+          Go Solar<br>
+          <span class="hl-orange">$0 Down.</span><br>
+          Start Saving<br>
+          Now.
+        </h1>
+
+        <p class="lp-subhead">
+          Lock in the <strong style="color:#fff;font-weight:600">30% Federal Tax Credit</strong> before it changes. As energy costs keep rising, LA Solar Group customers are saving tens of thousands — powering their homes and EVs with clean, affordable solar.
+        </p>
+
+        <div class="lp-section-label">Our Prepaid PPA Lets You:</div>
+
+        <div class="lp-checks">
+          <div class="lp-check">
+            <div class="lp-check-icon">
+              <svg viewBox="0 0 14 14"><polyline points="2 7 5.5 10.5 12 3.5"/></svg>
+            </div>
+            Take advantage of the 30% Federal Tax Credit
+          </div>
+          <div class="lp-check">
+            <div class="lp-check-icon">
+              <svg viewBox="0 0 14 14"><polyline points="2 7 5.5 10.5 12 3.5"/></svg>
+            </div>
+            Add Tesla Powerwall battery storage &amp; smart breakers
+          </div>
+          <div class="lp-check">
+            <div class="lp-check-icon">
+              <svg viewBox="0 0 14 14"><polyline points="2 7 5.5 10.5 12 3.5"/></svg>
+            </div>
+            Increase long-term savings &amp; control your energy use
+          </div>
+          <div class="lp-check">
+            <div class="lp-check-icon">
+              <svg viewBox="0 0 14 14"><polyline points="2 7 5.5 10.5 12 3.5"/></svg>
+            </div>
+            Tesla Certified Installer — 5-Star rated on Yelp &amp; Angi
+          </div>
+        </div>
+
+        <!-- Trust signals -->
+        <div class="lp-hero-trust">
+          <div class="lp-hero-trust-item">
+            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Lifetime Warranty
+          </div>
+          <div class="lp-hero-trust-item">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Zero Hassle
+          </div>
+          <div class="lp-hero-trust-item">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            No Obligation
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT: Quote form -->
+      <div class="lp-form-card" id="quote-form">
+        <div class="lp-form-head">
+          <div class="lp-form-title">Get Your <span>Free</span> Solar Quote</div>
+          <p class="lp-form-sub">No obligation. No pressure. Takes 60 seconds.</p>
+        </div>
+
+        <form action="#" method="post" id="solar-form">
+
+          <div class="lp-field-row">
+            <div class="lp-field">
+              <label for="lp-first">First Name</label>
+              <input id="lp-first" type="text" name="first_name" placeholder="John" required>
+            </div>
+            <div class="lp-field">
+              <label for="lp-last">Last Name</label>
+              <input id="lp-last" type="text" name="last_name" placeholder="Smith" required>
+            </div>
+          </div>
+
+          <div class="lp-field">
+            <label for="lp-phone">Phone Number</label>
+            <input id="lp-phone" type="tel" name="phone" placeholder="(818) 555-0000" required>
+          </div>
+
+          <div class="lp-field">
+            <label for="lp-email">Email Address</label>
+            <input id="lp-email" type="email" name="email" placeholder="john@email.com" required>
+          </div>
+
+          <div class="lp-field">
+            <label for="lp-address">Home Address</label>
+            <input id="lp-address" type="text" name="address" placeholder="123 Sunshine Ave, Los Angeles, CA" required>
+          </div>
+
+          <div class="lp-field">
+            <label for="lp-bill">Average Monthly Electric Bill</label>
+            <select id="lp-bill" name="monthly_bill">
+              <option value="" disabled selected>Select a range</option>
+              <option value="under-100">Under $100</option>
+              <option value="100-200">$100 – $200</option>
+              <option value="200-300">$200 – $300</option>
+              <option value="300-400">$300 – $400</option>
+              <option value="400+">$400+</option>
+            </select>
+          </div>
+
+          <button type="submit" class="lp-submit">
+            Get My Free Quote
+            <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+
+          <p class="lp-fine-print">
+            By submitting you agree to be contacted by LA Solar Group.<br>
+            We respect your privacy and will never sell your information.
+          </p>
+        </form>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- TRUST BAR -->
+  <div class="lp-trust">
+    <div class="lp-trust-item">
+      <div class="lp-trust-num">$0</div>
+      <div class="lp-trust-label">Down<br>Financing</div>
+    </div>
+    <div class="lp-trust-item">
+      <div class="lp-trust-num">30%</div>
+      <div class="lp-trust-label">Tax Credit<br>Guaranteed</div>
+    </div>
+    <div class="lp-trust-item">
+      <div class="lp-trust-num">25yr</div>
+      <div class="lp-trust-label">Panel<br>Warranty</div>
+    </div>
+    <div class="lp-trust-item">
+      <div class="lp-trust-num">5★</div>
+      <div class="lp-trust-label">Yelp &amp; Angi<br>Rated</div>
+    </div>
+    <div class="lp-trust-item">
+      <div class="lp-trust-num">500+</div>
+      <div class="lp-trust-label">Homes<br>Powered</div>
+    </div>
+  </div>
+
+  <script>
+    /* Phone auto-format */
+    const ph = document.getElementById('lp-phone');
+    if (ph) {
+      ph.addEventListener('input', e => {
+        const raw = e.target.value.replace(/\D/g,'').slice(0,10);
+        if (raw.length <= 3)      e.target.value = raw;
+        else if (raw.length <= 6) e.target.value = `(${raw.slice(0,3)}) ${raw.slice(3)}`;
+        else                      e.target.value = `(${raw.slice(0,3)}) ${raw.slice(3,6)}-${raw.slice(6)}`;
+      });
+    }
+
+    /* Nav background on scroll */
+    const hdr = document.querySelector('.lp-header');
+    window.addEventListener('scroll', () => {
+      hdr.style.background = window.scrollY > 60
+        ? 'rgba(0,0,0,0.90)'
+        : 'rgba(0,0,0,0.65)';
+    }, { passive: true });
+
+    /* Form submission feedback */
+    const form = document.getElementById('solar-form');
+    if (form) {
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+        const btn = form.querySelector('.lp-submit');
+        btn.innerHTML = '✓ Request Received!';
+        btn.style.background = '#2ea843';
+        btn.style.boxShadow = '0 4px 24px rgba(46,168,67,0.4)';
+        btn.disabled = true;
+        form.querySelectorAll('input, select').forEach(el => el.disabled = true);
+      });
+    }
+
+    /* Ensure video plays on mobile */
+    const vid = document.querySelector('.lp-hero-video');
+    if (vid) {
+      vid.play().catch(() => {});
+    }
+  </script>
+
+</body>
+</html>
