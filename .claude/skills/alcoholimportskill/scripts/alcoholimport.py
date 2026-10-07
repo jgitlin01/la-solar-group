@@ -4,9 +4,9 @@
 Source: TTB FOIA List of Permittees, republished weekly.
   https://www.ttb.gov/public-information/foia/list-of-permittees
 
-Commands (run from the skill folder or anywhere; paths resolve to the skill folder):
+Commands (run from the skill folder: data/ and raw snapshots resolve to the skill folder, file arguments to your cwd):
   pull                     download this week's TTB files into data/raw/<YYYY-MM-DD>/
-  feed  [--industry X]     new permits since the previous snapshot (event unit = permit)
+  feed  [--industry X] [--diff]  this week's new permits (event unit = permit)
   supply [--state ST]      wholesalers, deduped to ONE row per company
   sites  IN.csv OUT.jsonl  find each row's own website (search -> name-match gate)
   import-sites IN.csv MAP OUT.jsonl  merge websites found by an Exa agent run / VA sheet
@@ -82,8 +82,6 @@ def snapshots():
 # ---------------------------------------------------------------- pull
 def cmd_pull(a):
     day = a.date or dt.date.today().isoformat()
-    out = os.path.join(RAW, day)
-    os.makedirs(out, exist_ok=True)
     base = BASE
     try:
         _, _, page = get(LIST_PAGE, 30)
@@ -94,34 +92,53 @@ def cmd_pull(a):
         print("TTB page says updated:", upd.group(1) if upd else "unknown")
     except Exception as e:
         print("list page unreachable, using known path:", e)
+    bodies = {}
     for key, fn in FILES.items():
         st, _, body = get(base + fn, 180, cap=None)
-        with gzip.open(os.path.join(out, fn + ".gz"), "wt", encoding="utf-8") as f:
-            f.write(body)
+        bodies[fn] = body
         n = len(list(csv.DictReader(io.StringIO(body.lstrip("\ufeff")))))
         print(f"{key:10s} {st} rows={n}")
+    # TTB republishes weekly; a second pull in the same week is the SAME publication.
+    # Saving it as a new snapshot would make `feed --diff` report 0 new permits.
+    snaps = [d for d in snapshots() if d != day]
+    if snaps and not a.force:
+        prev = os.path.join(RAW, snaps[-1])
+        same = all(os.path.exists(os.path.join(prev, fn + ".gz")) and
+                   gzip.open(os.path.join(prev, fn + ".gz"), "rt", encoding="utf-8", newline="").read() == body
+                   for fn, body in bodies.items())
+        if same:
+            print(f"identical to snapshot {snaps[-1]} — same TTB publication, nothing saved (use --force to save anyway)")
+            return
+    out = os.path.join(RAW, day)
+    os.makedirs(out, exist_ok=True)
+    for fn, body in bodies.items():
+        with gzip.open(os.path.join(out, fn + ".gz"), "wt", encoding="utf-8", newline="") as f:
+            f.write(body)
     print("saved", out)
 
 
 # ---------------------------------------------------------------- feed
 def cmd_feed(a):
+    """Default: TTB's own 'Basic Permits Issued Since the Last Publication' file in the latest snapshot.
+    --diff: permits present in the latest snapshot's full lists but absent from the previous snapshot
+    (a cross-check that also catches permits TTB published without the flag)."""
     snaps = snapshots()
     if not snaps:
         sys.exit("no snapshots — run `pull` first")
     cur = snaps[-1]
-    rows = []
-    for key in ("importer", "wholesaler", "spirits", "wine"):
-        rows += read_csv(os.path.join(RAW, cur, FILES[key] + ".gz"))
-    if len(snaps) >= 2:
+    if a.diff:
+        if len(snaps) < 2:
+            sys.exit("--diff needs two weekly snapshots in data/raw/; run without --diff")
         prev = snaps[-2]
-        old = set()
+        rows, old = [], set()
         for key in ("importer", "wholesaler", "spirits", "wine"):
+            rows += read_csv(os.path.join(RAW, cur, FILES[key] + ".gz"))
             old |= {r["Permit_Number"] for r in read_csv(os.path.join(RAW, prev, FILES[key] + ".gz"))}
         new = [r for r in rows if r["Permit_Number"] not in old]
         how = f"diff {prev} -> {cur}"
     else:
-        new = [r for r in rows if r.get("New_Permit_Flag") == "1"]
-        how = f"New_Permit_Flag in {cur} (only one snapshot; diff needs two)"
+        new = read_csv(os.path.join(RAW, cur, FILES["new"] + ".gz"))
+        how = f"TTB 'issued since last publication' list in snapshot {cur}"
     if a.industry:
         new = [r for r in new if a.industry.lower() in r["Industry_Type"].lower()]
     if a.state:
@@ -132,6 +149,9 @@ def cmd_feed(a):
     from collections import Counter
     print(how, "| new permits:", len(new))
     print(Counter(r["Industry_Type"] for r in new).most_common())
+    if not new:
+        print("WARNING: 0 rows — nothing written")
+        return
     out = a.out or os.path.join(DATA, f"feed_{cur}.csv")
     write_csv(out, new)
     print("wrote", out)
@@ -146,7 +166,7 @@ def cmd_supply(a):
     by = {}
     for r in rows:
         k = norm(r["Owner_Name"])
-        r["company"] = r["Operating_Name"] or r["Owner_Name"]
+        r["company"] = r["Owner_Name"]  # one owner, many DBAs: the first row's DBA can be another brand entirely
         r["premises"] = 1
         if k in by:
             by[k]["premises"] += 1
@@ -157,6 +177,8 @@ def cmd_supply(a):
         random.seed(a.seed)
         out = random.sample(out, min(a.sample, len(out)))
     print(f"wholesaler rows {len(rows)} | COMPANIES {len(by)} | written {len(out)}")
+    print("NOTE: these are WHOLESALER PERMIT holders, mostly wineries/brands selling their own product — "
+          "NOT a distributor list. Find sites, sweep, then `export --kind distributor`.")
     path = a.out or os.path.join(DATA, f"supply_{cur}{'_' + a.state.upper() if a.state else ''}.csv")
     write_csv(path, out)
     print("wrote", path)
@@ -249,13 +271,14 @@ def cmd_sites(a):
     with open(a.out, "a") as f:
         for i, r in enumerate(todo, 1):
             names = [n for n in dict.fromkeys([r.get("Operating_Name"), r["Owner_Name"]]) if n]
-            site, status = "", "no_match"
+            site, status, errored = "", "no_match", False
             for n in names:
                 q = f"{n} {r['City'].title()} {r['State']} wine spirits"
                 try:
                     urls = search(q)
                 except Exception as e:
-                    status = f"search_error:{e}"
+                    errored = True
+                    print(f"  search error ({n}): {e}")
                     time.sleep(10)
                     continue
                 for u in urls:
@@ -266,6 +289,8 @@ def cmd_sites(a):
                 if site:
                     break
                 time.sleep(a.delay)
+            if errored and not site:
+                continue  # not checkpointed: a failed search is not an answer, retry on the next run
             r.update(site=site, site_status=status)
             f.write(json.dumps(r) + "\n")
             f.flush()
@@ -304,6 +329,7 @@ def sweep_one(r):
             ok = True
         except Exception:
             continue
+        body = re.sub(r"\\u[0-9a-fA-F]{4}", " ", body)  # JSON-escaped text: \\u2028 glued onto addresses
         body = html.unescape(body).replace("[at]", "@").replace("(at)", "@")
         found |= {e.strip(".").lower() for e in EMAIL.findall(body) if not JUNK.search(e)}
         if i == 0:
@@ -334,6 +360,9 @@ def cmd_sweep(a):
 def cmd_export(a):
     rows = [json.loads(l) for l in open(a.inp) if l.strip()]
     rows = [r for r in rows if r.get("email") and (r.get("email_on_own_domain") or not a.own_domain_only)]
+    if a.kind:
+        kinds = set(a.kind.split(","))
+        rows = [r for r in rows if r.get("business_kind") in kinds]
     if a.unit == "company":
         best = {}
         for r in rows:
@@ -361,18 +390,21 @@ def cmd_gate(a):
     c = Counter(r.get("sweep_status") or r.get("site_status") for r in rows)
     if any(c):
         print(dict(c))
+    k = Counter(r.get("business_kind") for r in rows if r.get("business_kind"))
+    if k:
+        print("business_kind:", dict(k))
 
 
 def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     s = p.add_subparsers(dest="cmd", required=True)
-    x = s.add_parser("pull"); x.add_argument("--date")
-    x = s.add_parser("feed"); x.add_argument("--industry"); x.add_argument("--state"); x.add_argument("--out")
+    x = s.add_parser("pull"); x.add_argument("--date"); x.add_argument("--force", action="store_true")
+    x = s.add_parser("feed"); x.add_argument("--diff", action="store_true"); x.add_argument("--industry"); x.add_argument("--state"); x.add_argument("--out")
     x = s.add_parser("supply"); x.add_argument("--state"); x.add_argument("--sample", type=int); x.add_argument("--seed", type=int, default=7); x.add_argument("--out")
     x = s.add_parser("sites"); x.add_argument("inp"); x.add_argument("out"); x.add_argument("--delay", type=float, default=1.5)
     x = s.add_parser("import-sites"); x.add_argument("inp"); x.add_argument("map"); x.add_argument("out")
     x = s.add_parser("sweep"); x.add_argument("inp"); x.add_argument("out"); x.add_argument("--workers", type=int, default=12)
-    x = s.add_parser("export"); x.add_argument("inp"); x.add_argument("out"); x.add_argument("--unit", choices=["event", "company"], default="event"); x.add_argument("--own-domain-only", action="store_true")
+    x = s.add_parser("export"); x.add_argument("inp"); x.add_argument("out"); x.add_argument("--unit", choices=["event", "company"], default="event"); x.add_argument("--own-domain-only", action="store_true"); x.add_argument("--kind", help="comma list, e.g. distributor")
     x = s.add_parser("gate"); x.add_argument("inp")
     a = p.parse_args()
     globals()["cmd_" + a.cmd.replace("-", "_")](a)

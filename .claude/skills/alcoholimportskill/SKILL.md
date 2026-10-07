@@ -19,12 +19,14 @@ bureau (TTB) publishes those **weekly**.
 
 | List | Rows (permits) | Companies | Flagged new this week |
 |---|---|---|---|
-| Importer | 21,365 | 19,152 | 24 |
+| Importer | 21,365 | 18,999 | 24 |
 | Wholesaler | 38,669 | 32,814 | 42 |
-| Distilled Spirits Plant | 5,565 | 5,157 | 11 |
-| Wine Producer | 18,123 | 16,576 | 18 |
+| Distilled Spirits Plant | 5,565 | 5,148 | 12 |
+| Wine Producer | 18,123 | 16,533 | 18 |
 
-"Companies" = `norm(Owner_Name)` (uppercase, punctuation and legal suffixes stripped).
+"Companies" = `norm(Owner_Name)` (uppercase, punctuation and legal suffixes stripped). "New this week" = rows
+in TTB's own "Basic Permits Issued Since the Last Publication" file (96 total). The `New_Permit_Flag` column in
+the full lists disagrees by one: it marks 11 distilled spirits plants, not 12. Trust the dedicated file.
 
 **Contact rate, measured on a 100-row sample** (Exa agent to find the site, $0.90 total,
 then this script's homepage + `/contact` sweep):
@@ -59,16 +61,27 @@ What these numbers mean, said plainly:
 
 ## How to run it
 
-Run all commands from the skill folder. The script uses only Python 3's standard
-library, so there is nothing to install.
+Run every command from the skill folder (`<repo root>/.claude/skills/alcoholimportskill`).
+`data/` resolves to the skill folder, and the file arguments you pass resolve to your
+current directory. The script uses only Python 3's standard library, so there is nothing
+to install.
 
 ```bash
-cd .claude/skills/alcoholimportskill
-python3 scripts/alcoholimport.py pull                 # this week's 5 TTB files -> data/raw/<date>/
-python3 scripts/alcoholimport.py feed                 # new permits (diff vs last snapshot)
+mkdir -p work
+python3 scripts/alcoholimport.py pull       # this week's 5 TTB files -> data/raw/<date>/ (skips if same publication)
+python3 scripts/alcoholimport.py feed       # TTB's "issued since last publication" list (all industries)
 python3 scripts/alcoholimport.py feed --industry importer --out data/demand_new.csv
-python3 scripts/alcoholimport.py supply --state CA    # wholesaler permits, 1 row per company
+python3 scripts/alcoholimport.py feed --diff   # cross-check: full lists vs previous weekly snapshot
+python3 scripts/alcoholimport.py supply --state CA --out data/supply_CA.csv   # wholesaler PERMITS, 1 row per owner
 ```
+
+- If `pull` says "identical to snapshot", TTB hasn't republished yet, and `feed` keeps
+  serving the latest list.
+- `feed --diff` needs two *different* weekly snapshots.
+- `supply` does **not** give you distributors. It gives everyone holding a wholesaler
+  permit (CA: 9,370 permits, 8,893 owners, mostly wineries). You only get distributors
+  after the site-finding step labels each `business_kind`, then
+  `export --kind distributor`.
 
 Finding websites (pick one):
 
@@ -78,12 +91,16 @@ Finding websites (pick one):
    winery_or_producer / retailer / other / unknown). Never guess a site. Save the result
    as JSON or CSV, then:
    `python3 scripts/alcoholimport.py import-sites data/demand_new.csv MAP.json work/demand.sites.jsonl`
+   - `data/exa_sites_map_2026-10-07.csv` is the map from the 100-row measurement. It
+     covers the 24 new importers, 26 random older importers and 50 random wholesaler
+     owners, **not** a whole state or a whole week. For new rows, run a new agent search.
    - `effort: "low"` ran 3 searches for 100 rows and found 9 sites. That is a run
      problem, not a market answer. Use `auto`.
-2. **`sites` command:** set `EXA_API_KEY` in `.env` for the Exa search API. Without a key
-   it falls back to DuckDuckGo, which **bot-blocks after a handful of queries** (HTTP
-   202 "anomaly" page). Bing's HTML results were junk (university sites for company
-   names). Don't rely on either for more than about 10 rows.
+2. **`sites` command:** set `EXA_API_KEY` in `.env` for the Exa search API. **Without a
+   key it is effectively dead.** It falls back to DuckDuckGo, which blocked from the very
+   first query in both test runs (HTTP 202 "anomaly" page or connection reset). There is
+   no Bing fallback; Bing's HTML results were junk when tested. A failed search is not
+   checkpointed, so re-running retries it.
 
 Then sweep and export:
 
@@ -91,11 +108,14 @@ Then sweep and export:
 python3 scripts/alcoholimport.py sweep  work/demand.sites.jsonl work/demand.swept.jsonl
 python3 scripts/alcoholimport.py gate   work/demand.swept.jsonl
 python3 scripts/alcoholimport.py export work/demand.swept.jsonl deliverables/<date>_demand.csv --unit event
-python3 scripts/alcoholimport.py export work/supply.swept.jsonl deliverables/<date>_supply.csv --unit company
+python3 scripts/alcoholimport.py export work/supply.swept.jsonl deliverables/<date>_supply.csv --unit company --kind distributor
 ```
 
 `sites` and `sweep` checkpoint to jsonl. Re-running skips rows already done. To redo a
-sweep, delete its output file first.
+sweep, delete its output file first. `work/` is scratch (gitignored), so start each
+week's run with fresh file names. Check `email_on_own_domain`: a False value can still
+be right (Bouchard's site is mdhamerica.com, its inboxes are @bpfamerica.com), but it
+can also be a PR agency. Use `--own-domain-only` for a strict list.
 
 ## Weekly rhythm
 
@@ -121,6 +141,9 @@ growing.
   on `/contact`. Only queuing contact pages after the homepage loaded missed them.
 - **Widget-vendor inboxes.** `info@grappos.com` (a store-locator widget) appeared on a
   winery site. Vendor domains are in `JUNK`. Add any new ones you see.
+- **JSON-escaped page text.** `\u2028` glued onto an address (`u2028gilauripr@...`). The sweep strips `\uXXXX` escapes first.
+- **Same-week re-pull.** Saving an identical publication as a new snapshot made `feed` report 0 new. `pull` now compares content (byte-exact: gzip text mode turns `\r\n` into `\n` and breaks the comparison) and skips duplicates.
+- **Supply company name.** The first premises row's DBA can be another brand (Young's Market showed as "Republic National Distributing"). `supply` uses the legal `Owner_Name`.
 - **Non-sales inboxes.** grants@, careers@, press@ and similar are dropped. Gmail and
   sbcglobal inboxes are kept, because small owners really use them.
 - **Multi-state firms.** Johnson Brothers SD exported `infonc@`, the North Carolina
