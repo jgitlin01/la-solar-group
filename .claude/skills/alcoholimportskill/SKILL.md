@@ -73,6 +73,7 @@ python3 scripts/alcoholimport.py feed       # TTB's "issued since last publicati
 python3 scripts/alcoholimport.py feed --industry importer --out data/demand_new.csv
 python3 scripts/alcoholimport.py feed --diff   # cross-check: full lists vs previous weekly snapshot
 python3 scripts/alcoholimport.py supply --state CA --out data/supply_CA.csv   # wholesaler PERMITS, 1 row per owner
+# feed also takes --state ST
 ```
 
 - If `pull` says "identical to snapshot", TTB hasn't republished yet, and `feed` keeps
@@ -92,8 +93,12 @@ Finding websites (pick one):
    as JSON or CSV, then:
    `python3 scripts/alcoholimport.py import-sites data/demand_new.csv MAP.json work/demand.sites.jsonl`
    - `data/exa_sites_map_2026-10-07.csv` is the map from the 100-row measurement. It
-     covers the 24 new importers, 26 random older importers and 50 random wholesaler
-     owners, **not** a whole state or a whole week. For new rows, run a new agent search.
+     holds only the **31 sites found** out of those 100 rows: the 24 new importers, 26
+     random older importers and 50 random wholesaler owners. It matches 7 of this week's
+     new importers and just 9 of California's 8,893 wholesaler owners. Rows it doesn't
+     cover are labelled `not_searched`, never `no_match`. For anything new, run a new
+     agent search.
+   - The map can be `.json` (the agent's `{"rows":[...]}`) or `.csv` (`permit,website,business_kind`).
    - `effort: "low"` ran 3 searches for 100 rows and found 9 sites. That is a run
      problem, not a market answer. Use `auto`.
 2. **`sites` command:** set `EXA_API_KEY` in `.env` for the Exa search API. **Without a
@@ -101,6 +106,24 @@ Finding websites (pick one):
    first query in both test runs (HTTP 202 "anomaly" page or connection reset). There is
    no Bing fallback; Bing's HTML results were junk when tested. A failed search is not
    checkpointed, so re-running retries it.
+
+**Be honest about what a run without an Exa agent search delivers:**
+- New importers: about 4 inboxes a week out of about 24, using the committed map, and
+  only for the week it was built.
+- California distributors: **zero**. The one California distributor in the map
+  (caroyalspirits.com) didn't respond when fetched.
+
+Use `export --include-no-email` to keep every row with its TTB street address. That
+address is the only contact detail every row has, and it's enough for direct mail.
+
+Supply side, end to end (same steps as demand):
+
+```bash
+python3 scripts/alcoholimport.py supply --state CA --out data/supply_CA.csv
+# Exa agent on data/supply_CA.csv -> MAP (8,893 owners: sample or pre-filter by name first)
+python3 scripts/alcoholimport.py import-sites data/supply_CA.csv MAP work/supply.sites.jsonl
+python3 scripts/alcoholimport.py sweep  work/supply.sites.jsonl work/supply.swept.jsonl
+```
 
 Then sweep and export:
 
@@ -112,16 +135,17 @@ python3 scripts/alcoholimport.py export work/supply.swept.jsonl deliverables/<da
 ```
 
 `sites` and `sweep` checkpoint to jsonl. Re-running skips rows already done. To redo a
-sweep, delete its output file first. `work/` is scratch (gitignored), so start each
+sweep, delete its output file first. Rows marked `unverified` (timeout, dead
+certificate, proxy 502) are retried automatically on the next `sweep`. `work/` is scratch (gitignored), so start each
 week's run with fresh file names. Check `email_on_own_domain`: a False value can still
 be right (Bouchard's site is mdhamerica.com, its inboxes are @bpfamerica.com), but it
 can also be a PR agency. Use `--own-domain-only` for a strict list.
 
 ## Weekly rhythm
 
-Every Monday: `pull`, then `feed`. You only get a true week-over-week **refill rate**
-once there are two snapshots in `data/raw/`. Until then `feed` falls back to TTB's own
-`New_Permit_Flag`. Snapshots are the only date record you have (the file carries no
+Every Monday: `pull`, then `feed`. `feed` always reads TTB's dedicated "issued since the
+last publication" file. `feed --diff` is a cross-check that needs two different weekly
+snapshots in `data/raw/`. Snapshots are the only date record you have (the file carries no
 issue date), so **commit each week's `data/raw/<date>/`**. Measure 7-day, 30-day and
 90-day counts after a month of snapshots, and only then say whether the market is
 growing.

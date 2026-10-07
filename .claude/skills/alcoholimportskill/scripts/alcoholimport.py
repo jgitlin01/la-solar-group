@@ -219,8 +219,8 @@ def search_ddg(q):
     data = urllib.parse.urlencode({"q": q}).encode()
     st, _, body = get("https://html.duckduckgo.com/html/", 20, data=data)
     urls = [urllib.parse.unquote(u) for u in re.findall(r'uddg=([^&"]+)', body)]
-    if st != 200 or ("anomaly" in body.lower() and not urls):
-        raise RuntimeError("ddg blocked")
+    if st != 200 or not urls:  # DDG serves a 200 with no results when it is throttling
+        raise RuntimeError("ddg blocked or empty")
     return list(dict.fromkeys(urls))
 
 
@@ -254,7 +254,8 @@ def cmd_import_sites(a):
             host = urllib.parse.urlparse(site).netloc.lower() if site else ""
             if host and BAD.search(host):
                 host = ""  # a directory page is not the company's front door
-            r.update(site=f"https://{host}" if host else "", site_status="found" if host else "no_match",
+            r.update(site=f"https://{host}" if host else "",
+                     site_status="found" if host else ("no_match" if r["Permit_Number"] in by else "not_searched"),
                      business_kind=x.get("business_kind", ""))
             n += bool(host)
             f.write(json.dumps(r) + "\n")
@@ -340,13 +341,17 @@ def sweep_one(r):
     own = sorted((e for e in found if e.split("@")[1].endswith(host)), key=rank_email)
     other = sorted((e for e in found if e not in own), key=rank_email)
     best = (own or other or [""])[0]
-    r.update(email=best, emails=";".join(own + other), email_on_own_domain=bool(own),
+    r.update(email=best, emails=";".join(own + other), email_on_own_domain=bool(own) and best in own,
+             other_domain_emails=";".join(other),
              sweep_status=("email" if best else "no_email") if ok else "unverified")
     return r
 
 
 def cmd_sweep(a):
     rows = [json.loads(l) for l in open(a.inp) if l.strip()]
+    if os.path.exists(a.out):  # keep settled rows; drop `unverified` so this run retries them
+        kept = [l for l in open(a.out) if l.strip() and json.loads(l).get("sweep_status") != "unverified"]
+        open(a.out, "w").writelines(kept)
     seen = done_keys(a.out)
     todo = [r for r in rows if r["Permit_Number"] not in seen]
     print(f"{len(rows)} rows, {len(todo)} to sweep")
@@ -359,7 +364,8 @@ def cmd_sweep(a):
 # ---------------------------------------------------------------- export / gate
 def cmd_export(a):
     rows = [json.loads(l) for l in open(a.inp) if l.strip()]
-    rows = [r for r in rows if r.get("email") and (r.get("email_on_own_domain") or not a.own_domain_only)]
+    if not a.include_no_email:
+        rows = [r for r in rows if r.get("email") and (r.get("email_on_own_domain") or not a.own_domain_only)]
     if a.kind:
         kinds = set(a.kind.split(","))
         rows = [r for r in rows if r.get("business_kind") in kinds]
@@ -367,12 +373,12 @@ def cmd_export(a):
         best = {}
         for r in rows:
             k = norm(r["Owner_Name"])
-            if k not in best or rank_email(r["email"]) < rank_email(best[k]["email"]):
+            if k not in best or rank_email(r.get("email") or "~") < rank_email(best[k].get("email") or "~"):
                 best[k] = r
         rows = list(best.values())
     rows.sort(key=lambda r: (r["State"], r["company"]))
-    fields = ["company", "Owner_Name", "Operating_Name", "Industry_Type", "Permit_Number", "City", "State", "Prem_Zip",
-              "site", "business_kind", "email", "emails", "email_on_own_domain"]
+    fields = ["company", "Owner_Name", "Operating_Name", "Industry_Type", "Permit_Number", "Street", "City", "State", "Prem_Zip",
+              "site", "business_kind", "email", "emails", "email_on_own_domain", "other_domain_emails", "site_status", "sweep_status"]
     write_csv(a.out, rows, fields)
     gate(rows)
     print("wrote", a.out)
@@ -404,7 +410,7 @@ def main():
     x = s.add_parser("sites"); x.add_argument("inp"); x.add_argument("out"); x.add_argument("--delay", type=float, default=1.5)
     x = s.add_parser("import-sites"); x.add_argument("inp"); x.add_argument("map"); x.add_argument("out")
     x = s.add_parser("sweep"); x.add_argument("inp"); x.add_argument("out"); x.add_argument("--workers", type=int, default=12)
-    x = s.add_parser("export"); x.add_argument("inp"); x.add_argument("out"); x.add_argument("--unit", choices=["event", "company"], default="event"); x.add_argument("--own-domain-only", action="store_true"); x.add_argument("--kind", help="comma list, e.g. distributor")
+    x = s.add_parser("export"); x.add_argument("inp"); x.add_argument("out"); x.add_argument("--unit", choices=["event", "company"], default="event"); x.add_argument("--own-domain-only", action="store_true"); x.add_argument("--kind", help="comma list, e.g. distributor"); x.add_argument("--include-no-email", action="store_true", help="keep every row (TTB street address is the only contact all rows have)")
     x = s.add_parser("gate"); x.add_argument("inp")
     a = p.parse_args()
     globals()["cmd_" + a.cmd.replace("-", "_")](a)
