@@ -1,0 +1,25 @@
+company,Owner_Name,Operating_Name,Industry_Type,Permit_Number,Street,City,State,Prem_Zip,site,business_kind,email,emails,email_on_own_domain,other_domain_emails,site_status,sweep_status
+Jazleen Rose,JAZLEEN ROSE LLC,Jazleen Rose,Importer (Alcohol),AZ-I-21235,4539 N 22ND ST UNIT 7393,PHOENIX,AZ,85388,,,,,,,not_searched,no_site
+ANA BERTHA PARTIDA LLC,ANA BERTHA PARTIDA LLC,,Importer (Alcohol),CA-I-24429,601 TESLA DR,LATHROP,CA,95330,,,,,,,not_searched,no_site
+"BOUCHARD PERE & FILS AMERICA, INC.","BOUCHARD PERE & FILS AMERICA, INC.",,Importer (Alcohol),CA-I-24431,2155 PICKETT RD STE 1A,CALISTOGA,CA,94515,https://www.mdhamerica.com,importer_brand,info@bpfamerica.com,info@bpfamerica.com;rthompson@bpfamerica.com;ehunt@bpfamerica.com;clozano@bpfamerica.com,False,info@bpfamerica.com;rthompson@bpfamerica.com;ehunt@bpfamerica.com;clozano@bpfamerica.com,found,email
+Gilauri Wines,CALIFORNIA GRAPE HUNTERS LLC,Gilauri Wines,Importer (Alcohol),CA-I-24430,588 ZINFANDEL LN,SAINT HELENA,CA,94574,https://gilauri.com,winery_or_producer,inquiries@gilauri.com,inquiries@gilauri.com;gilauripr@glodownead.com,True,gilauripr@glodownead.com,found,email
+"NEXUS GLOBAL PARTNERS, LLC","NEXUS GLOBAL PARTNERS, LLC",,Importer (Alcohol),FL-I-23225,1395 BRICKELL AVE STE 800,MIAMI,FL,33131,,,,,,,not_searched,no_site
+THE DALMATIAN GRAND CRU COLLECTIVE LLC,THE DALMATIAN GRAND CRU COLLECTIVE LLC,,Importer (Alcohol),FL-I-23226,5805 MULLIGAN WAY,LAKEWOOD RANCH,FL,34211,,,,,,,not_searched,no_site
+AJ PENN IMPORTS LLC,AJ PENN IMPORTS LLC,,Importer (Alcohol),IL-I-21591,201 N WESTSHORE DR UNIT 1101,CHICAGO,IL,60601,,,,,,,not_searched,no_site
+"ELLAVIOLET ENTERPRISES, LLC","ELLAVIOLET ENTERPRISES, LLC",,Importer (Alcohol),MD-I-21278,14204 N GATE DR,SILVER SPRING,MD,20906,,,,,,,not_searched,no_site
+SUD WINES LLC,SUD WINES LLC,,Importer (Alcohol),MD-I-21277,3901 WOODLAWN RD,CHEVY CHASE,MD,20815,,,,,,,not_searched,no_site
+FIRST CRUSH DISTRIBUTION LLC,FIRST CRUSH DISTRIBUTION LLC,,Importer (Alcohol),MI-I-21211,44267 MACOMB INDUSTRIAL DR,CLINTON TOWNSHIP,MI,48036,https://firstcrushdistribution.com,distributor,sales@firstcrushdistribution.com,sales@firstcrushdistribution.com,True,,found,email
+Griffin Claw Brewing Company,"ETON STREET BREWERY, LLC",Griffin Claw Brewing Company,Importer (Alcohol),MI-I-21210,575 S ETON ST,BIRMINGHAM,MI,48009,https://griffinclawbrewingcompany.com,winery_or_producer,,,False,,found,no_email
+SUNNYSIDE VINES LLC,SUNNYSIDE VINES LLC,,Importer (Alcohol),MI-I-21212,1096 PALMER ST,PLYMOUTH,MI,48170,,,,,,,not_searched,no_site
+YAHYAH LLC,YAHYAH LLC,,Importer (Alcohol),MO-I-21140,4731 DELMAR BLVD,SAINT LOUIS,MO,63108,,,,,,,not_searched,no_site
+CURATED INTERNATIONAL LLC,CURATED INTERNATIONAL LLC,,Importer (Alcohol),MS-I-21028,1148 COUNTY ROAD 121,NEW ALBANY,MS,38652,,,,,,,not_searched,no_site
+FOURESS SYNERGY LLC,FOURESS SYNERGY LLC,,Importer (Alcohol),NC-I-21306,5000 CENTREGREEN WAY STE 500,CARY,NC,27513,https://www.fouressynergy.com,other,admin@fouressynergy.com,admin@fouressynergy.com;koreabranch@fouressynergy.com,True,,found,email
+Satori,AMADOR HOLDINGS LLC,Satori,Importer (Alcohol),NV-I-21242,10267 SANTO NINA CT,LAS VEGAS,NV,89135,,,,,,,not_searched,no_site
+Congming Liquor Industry CO LTD,CONGMING LIQUOR INDUSTRY CO LTD.,Congming Liquor Industry CO LTD,Importer (Alcohol),NY-I-22325,133-20 41ST RD UNIT 6A,FLUSHING,NY,11355,,,,,,,not_searched,no_site
+Pavo Real,PAVO REAL LLC.,Pavo Real,Importer (Alcohol),OK-I-21042,4312 SE 31ST ST,DEL CITY,OK,73115,,,,,,,not_searched,no_site
+Proto Wines,"PROTO, LLC",Proto Wines,Importer (Alcohol),OR-I-21261,1330 SW MELROSE AVE,MCMINNVILLE,OR,97128,,,,,,,not_searched,no_site
+Vinoski Winery,"VINOSKI & ASSOCIATES, INC.",Vinoski Winery,Importer (Alcohol),PA-I-21321,333 CASTLE DR,ROSTRAVER,PA,15012,https://www.vinoskiwinery.com,winery_or_producer,,,False,,found,no_email
+"DV SPIRITS, LLC","DV SPIRITS, LLC",,Importer (Alcohol),TN-I-21152,1287 MT. VIEW INDUSTRIAL DR,MORRISON,TN,37357,,,,,,,not_searched,no_site
+"TERROIR GROUP, LLC","TERROIR GROUP, LLC",,Importer (Alcohol),TX-I-22335,2301 PORTSMOUTH ST,HOUSTON,TX,77098,https://theterroirgroup.com,other,,,False,,found,no_email
+Darooh LLC,DAROOH LLC,Darooh LLC,Importer (Alcohol),VA-I-21380,2606 NORTHFIELD RD,CHARLOTTESVILLE,VA,22901,,,,,,,not_searched,no_site
+CHAUSSETTE LLC,CHAUSSETTE LLC,,Importer (Alcohol),WA-I-21408,1812 WASHINGTON ST UNIT H-39,VANCOUVER,WA,98660,,,,,,,not_searched,no_site
